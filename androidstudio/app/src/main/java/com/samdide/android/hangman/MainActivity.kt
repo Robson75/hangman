@@ -7,11 +7,16 @@ import android.util.DisplayMetrics
 import android.widget.ImageView
 import kotlin.math.roundToInt
 
+import android.util.Log
+
+private const val TAG = "MainActivity"
+
 // original images aspect ratio = 2.1/1.5
 private const val IMAGE_ASPECT_RATIO = 2.1 / 1.5
 
 class MainActivity : AppCompatActivity() {
     lateinit var escapeAnimation: AnimationDrawable
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +31,11 @@ class MainActivity : AppCompatActivity() {
         escapeAnimation = escapeImage.background as AnimationDrawable
 
         escapeImage.setOnClickListener{
-
             escapeAnimation.start() }
+
+        var word = "hello"
+        var hangman = Hangman(word)
+        hangman.guess('l')
+        hangman.guess('h')
     }
 }
