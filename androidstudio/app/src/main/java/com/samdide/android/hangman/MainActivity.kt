@@ -1,13 +1,15 @@
 package com.samdide.android.hangman
 
 import android.graphics.drawable.AnimationDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.roundToInt
 
-import android.util.Log
 
 private const val TAG = "MainActivity"
 
@@ -16,6 +18,10 @@ private const val IMAGE_ASPECT_RATIO = 2.1 / 1.5
 
 class MainActivity : AppCompatActivity() {
     lateinit var escapeAnimation: AnimationDrawable
+
+    // test with word "hello"
+    var word = "HELLO"
+    var hangman = Hangman(word)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +39,23 @@ class MainActivity : AppCompatActivity() {
         escapeImage.setOnClickListener{
             escapeAnimation.start() }
 
-        var word = "hello"
-        var hangman = Hangman(word)
-        hangman.guess('l')
-        hangman.guess('h')
+        val word_TV = findViewById<TextView>(R.id.word)
+        word_TV.text = hangman.get_display_word()
+        //hangman.guess('l')
+        //hangman.guess('h')
     }
+
+    fun character_click(view: View) {
+        val b: Button = view as Button
+        val guess_char: Char = b.text.toString()[0]
+
+        var displayWord:String = hangman.guess(guess_char)
+        setDisplayText(displayWord)
+    }
+
+    fun setDisplayText(word: String){
+        val word_TV = findViewById<TextView>(R.id.word)
+        word_TV.text = word
+    }
+
 }
