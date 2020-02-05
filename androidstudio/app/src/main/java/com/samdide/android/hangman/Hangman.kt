@@ -1,6 +1,14 @@
 package com.samdide.android.hangman
 
+import android.R
+import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+
 
 private const val TAG = "Hangman"
 
@@ -8,6 +16,7 @@ class Hangman(var word: String = "TEST") {
     private val replaceCharacter = '_'
     private var display_word: String
     private var found_characters = mutableSetOf<Char>()
+    private var guesses = 0
     init{
         display_word = init_display(word)
     }
@@ -17,6 +26,8 @@ class Hangman(var word: String = "TEST") {
         // If guessed character in word add it to the set of found characters
         if(guess_char in word){
             found_characters.add(guess_char)
+        }else{
+            guesses ++
         }
         for(char in word){
             if (char in found_characters){
@@ -40,6 +51,10 @@ class Hangman(var word: String = "TEST") {
 
     public fun get_display_word():String{
         return display_word
+    }
+
+    public fun getGuesses():Int{
+        return guesses
     }
 
 }

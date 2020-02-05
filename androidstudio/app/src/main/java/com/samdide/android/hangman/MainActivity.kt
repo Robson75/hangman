@@ -17,11 +17,13 @@ private const val TAG = "MainActivity"
 private const val IMAGE_ASPECT_RATIO = 2.1 / 1.5
 
 class MainActivity : AppCompatActivity() {
+    lateinit var imageHolder: ImageView
     lateinit var escapeAnimation: AnimationDrawable
 
     // test with word "hello"
     var word = "HELLO"
     var hangman = Hangman(word)
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,17 +32,15 @@ class MainActivity : AppCompatActivity() {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
-        val escapeImage = findViewById<ImageView>(R.id.hangManView)
-        escapeImage.layoutParams.width = width;
-        escapeImage.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
-        escapeImage.setBackgroundResource(R.drawable.escape)
-        escapeAnimation = escapeImage.background as AnimationDrawable
+        imageHolder = findViewById(R.id.hangManView)
+        imageHolder.layoutParams.width = width;
+        imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
+        imageHolder.setBackgroundResource(R.drawable.escape)
 
-        escapeImage.setOnClickListener{
-            escapeAnimation.start() }
 
         val word_TV = findViewById<TextView>(R.id.word)
         word_TV.text = hangman.get_display_word()
+        set_image(0)
         //hangman.guess('l')
         //hangman.guess('h')
     }
@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
 
         var displayWord:String = hangman.guess(guess_char)
         setDisplayText(displayWord)
+        var guesses:Int = hangman.getGuesses()
+        set_image(guesses)
     }
 
     fun setDisplayText(word: String){
@@ -58,4 +60,26 @@ class MainActivity : AppCompatActivity() {
         word_TV.text = word
     }
 
+    public fun set_image(guesses: Int){
+
+       when(guesses) {
+            0 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_1)
+            1 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_2)
+            2 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_3)
+            3 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_4)
+            4 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_5)
+            5 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_6)
+            6 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_7)
+
+            7 -> run_escape_animation()
+            else -> println("Number too high")
+        }
+
+    }
+    private fun run_escape_animation(){
+        imageHolder.setBackgroundResource(R.drawable.escape)
+        escapeAnimation = imageHolder.background as AnimationDrawable
+
+        escapeAnimation.start()
+    }
 }
