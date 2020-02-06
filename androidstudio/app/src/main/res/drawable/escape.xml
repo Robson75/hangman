@@ -3,10 +3,13 @@
     android:oneshot="false">
     <item android:drawable="@drawable/hangman_base_8" android:duration="500" />
     <item android:drawable="@drawable/escape1" android:duration="200" />
-    <item android:drawable="@drawable/escape2" android:duration="100" />
+    <item android:drawable="@drawable/escape2" android:duration="150" />
     <item android:drawable="@drawable/escape3" android:duration="200" />
     <item android:drawable="@drawable/escape4" android:duration="200" />
     <item android:drawable="@drawable/escape5" android:duration="200" />
     <item android:drawable="@drawable/escape6" android:duration="200" />
-    <item android:drawable="@drawable/escape7" android:duration="200" />
+    <item android:drawable="@drawable/escape7" android:duration="180" />
+    <item android:drawable="@drawable/escape8" android:duration="180" />
+    <item android:drawable="@drawable/escape9" android:duration="170" />
+    <item android:drawable="@drawable/escape10" android:duration="170" />
 </animation-list>
