@@ -19,6 +19,7 @@ class Hangman(var word: String = "TEST") {
     private var guesses = 0
     init{
         display_word = init_display(word)
+        Log.d(TAG, "word: " + word)
     }
 
     public fun guess(guess_char: Char): String {

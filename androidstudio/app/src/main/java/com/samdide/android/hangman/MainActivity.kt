@@ -23,28 +23,18 @@ private const val IMAGE_ASPECT_RATIO = 2.1 / 1.5
 class MainActivity : AppCompatActivity() {
     lateinit var imageHolder: ImageView
     lateinit var escapeAnimation: AnimationDrawable
+    lateinit var word: String
+    lateinit var hangman: Hangman
+    var wordNr = 0
 
-    // test with word "hello"
-    var word = "HELLO"
-    var hangman = Hangman(word)
+    // All words in uppercase
+    var wordList = arrayOf("BANANA", "RAT", "GARLIC", "SPIDER", "FRACTION", "MERCURY", "APOSTROPHE")
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        imageHolder = findViewById(R.id.hangManView)
-        imageHolder.layoutParams.width = width;
-        imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
-        imageHolder.setBackgroundResource(R.drawable.escape)
-
-
-        val word_TV = findViewById<TextView>(R.id.word)
-        word_TV.text = hangman.get_display_word()
-        setImage(0)
+        initGame(wordNr)
         //hangman.guess('l')
         //hangman.guess('h')
     }
@@ -65,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         isClickable = false
     }
 
-    fun setDisplayText(word: String){
+    public fun setDisplayText(word: String){
         val word_TV = findViewById<TextView>(R.id.word)
         word_TV.text = word
     }
@@ -80,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             4 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_5)
             5 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_6)
             6 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_7)
-
             7 -> run_escape_animation()
             else -> println("Number too high")
         }
@@ -91,9 +80,32 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             imageHolder.setBackgroundResource(R.drawable.escape)
             escapeAnimation = imageHolder.background as AnimationDrawable
-
             escapeAnimation.start()
         }, 500)
+        Handler().postDelayed({
+            wordNr ++
+            if (wordNr >= wordList.size) wordNr = 0
+            initGame(wordNr)
+        }, 5000)
+
+    }
+    private fun initGame(wordNr: Int){
+        word = wordList[wordNr]
+        hangman = Hangman(word)
+        setContentView(R.layout.activity_main)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels
+        imageHolder = findViewById(R.id.hangManView)
+        imageHolder.layoutParams.width = width;
+        imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
+
+
+        val word_TV = findViewById<TextView>(R.id.word)
+        word_TV.text = hangman.get_display_word()
+
+        // set hangman graphic back
+        setImage(0)
 
     }
 }
