@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Button
@@ -86,9 +87,13 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun run_escape_animation(){
-        imageHolder.setBackgroundResource(R.drawable.escape)
-        escapeAnimation = imageHolder.background as AnimationDrawable
+        imageHolder.setBackgroundResource(R.drawable.hangman_base_8)
+        Handler().postDelayed({
+            imageHolder.setBackgroundResource(R.drawable.escape)
+            escapeAnimation = imageHolder.background as AnimationDrawable
 
-        escapeAnimation.start()
+            escapeAnimation.start()
+        }, 500)
+
     }
 }
