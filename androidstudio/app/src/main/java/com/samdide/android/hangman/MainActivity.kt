@@ -1,5 +1,7 @@
 package com.samdide.android.hangman
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -8,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.*
 import kotlin.math.roundToInt
 
 
@@ -40,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         val word_TV = findViewById<TextView>(R.id.word)
         word_TV.text = hangman.get_display_word()
-        set_image(0)
+        setImage(0)
         //hangman.guess('l')
         //hangman.guess('h')
     }
@@ -48,11 +51,17 @@ class MainActivity : AppCompatActivity() {
     fun character_click(view: View) {
         val b: Button = view as Button
         val guess_char: Char = b.text.toString()[0]
+        b.disable()
 
         var displayWord:String = hangman.guess(guess_char)
         setDisplayText(displayWord)
         var guesses:Int = hangman.getGuesses()
-        set_image(guesses)
+        setImage(guesses)
+    }
+
+    private fun View.disable() {
+        alpha = 0.2f
+        isClickable = false
     }
 
     fun setDisplayText(word: String){
@@ -60,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         word_TV.text = word
     }
 
-    public fun set_image(guesses: Int){
+    public fun setImage(guesses: Int){
 
        when(guesses) {
             0 -> imageHolder.setBackgroundResource(R.drawable.hangman_base_1)
