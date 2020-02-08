@@ -153,5 +153,6 @@ class MainActivity : AppCompatActivity() {
     private fun fadeInNewGame(){
         imageStar.animate()
             .alpha(0f)
+            .setDuration(500)
     }
 }
