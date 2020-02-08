@@ -123,6 +123,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun runWinAnimation(){
         Log.d(TAG, "run win animation")
+        imageHolder.animate()
+            .alpha(0f)
+            .setDuration(200)
+
         imageStar.apply {
             // Set the star view to 0% opacity but visible, so that it is visible
             // (but fully transparent) during the animation.
@@ -133,26 +137,29 @@ class MainActivity : AppCompatActivity() {
             // listener set on the view.
             animate()
                 .alpha(1f)
+
+                .scaleX(2f)
+                .scaleY(2f)
                 .setDuration(500)
                 .setListener(null)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        wordNr ++
-                        if (wordNr >= wordList.size) wordNr = 0
-                        initGame(wordNr)
+                        fadeInNewGame()
                     }
                 })
         }
-        // Animate the hangman view to 0% opacity. After the animation ends,
-        // set its visibility to GONE as an optimization step (it won't
-        // participate in layout passes, etc.)
-        hangManView.animate()
-            .alpha(0f)
-            .setDuration(500)
+
     }
     private fun fadeInNewGame(){
         imageStar.animate()
             .alpha(0f)
             .setDuration(500)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    wordNr ++
+                    if (wordNr >= wordList.size) wordNr = 0
+                    initGame(wordNr)
+                }
+            })
     }
 }
