@@ -333,7 +333,19 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" /><![CDATA[
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="103dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" /><![CDATA[
+
+
 
 
 
@@ -342,6 +354,7 @@
 
 
     >
+
 
 
 
