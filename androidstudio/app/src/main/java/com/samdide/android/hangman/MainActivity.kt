@@ -60,15 +60,31 @@ class MainActivity : AppCompatActivity() {
         setDisplayText(displayWord)
         var guesses:Int = hangman.getGuesses()
         setImage(guesses)
+
+        // handle lose condition
         if (guesses >= MAX_GUESSES){
-            enableButtons(window.decorView, false)
+            toggleButtons(window.decorView, false)
+            showCorrectWord()
         }
 
-        //handle win condition
+        // handle win condition
         Log.d(TAG, "display word: " + displayWord + " word: " + word)
         if (displayWord.replace(" ", "").equals(word)){
             runWinAnimation()
         }
+    }
+
+    private fun showCorrectWord(){
+        val word_TV = findViewById<TextView>(R.id.word)
+        Handler().postDelayed({
+            word_TV.alpha = 0f
+            word_TV.text = word
+            word_TV.animate()
+                .alpha(1f)
+                .setDuration(1000)
+
+        }, 1000)
+
     }
 
 
@@ -112,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         hangman = Hangman(word)
         // set hangman graphic to first frame
         setImage(0)
-        enableButtons(window.decorView, true)
+        toggleButtons(window.decorView, true)
         val word_TV = findViewById<TextView>(R.id.word)
         word_TV.text = hangman.get_display_word()
         word_TV.alpha = 0f
@@ -179,11 +195,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun enableButtons(v: View, enable: Boolean) {
+    private fun toggleButtons(v: View, enable: Boolean) {
         val viewgroup = v as ViewGroup
         for (i in 0 until viewgroup.childCount) {
             val v1 = viewgroup.getChildAt(i)
-            (v1 as? ViewGroup)?.let { enableButtons(it, enable) }
+            (v1 as? ViewGroup)?.let { toggleButtons(it, enable) }
             if (v1 is Button ) {
                 if(enable) {
                     v1.enable()
