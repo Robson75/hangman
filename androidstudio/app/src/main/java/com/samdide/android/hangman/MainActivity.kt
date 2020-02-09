@@ -2,20 +2,17 @@ package com.samdide.android.hangman
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.roundToInt
 
 
@@ -23,6 +20,7 @@ private const val TAG = "MainActivity"
 
 // original images aspect ratio = 2.1/1.5
 private const val IMAGE_ASPECT_RATIO = 2.1 / 1.5
+private const val MAX_GUESSES = 7
 
 class MainActivity : AppCompatActivity() {
     lateinit var imageHolder: ImageView
@@ -39,6 +37,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val width = displayMetrics.widthPixels
+        imageStar = findViewById(R.id.star)
+        imageStar.visibility = View.GONE
+        imageHolder = findViewById(R.id.hangManView)
+        imageHolder.layoutParams.width = width;
+        imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
         initGame(wordNr)
         //hangman.guess('l')
         //hangman.guess('h')
@@ -53,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         setDisplayText(displayWord)
         var guesses:Int = hangman.getGuesses()
         setImage(guesses)
+        if (guesses >= MAX_GUESSES){
+            enableButtons(window.decorView, false)
+        }
 
         //handle win condition
         Log.d(TAG, "display word: " + displayWord + " word: " + word)
@@ -61,10 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun View.disable() {
-        alpha = 0.2f
-        isClickable = false
-    }
+
 
     public fun setDisplayText(word: String){
         val word_TV = findViewById<TextView>(R.id.word)
@@ -97,35 +104,33 @@ class MainActivity : AppCompatActivity() {
             wordNr ++
             if (wordNr >= wordList.size) wordNr = 0
             initGame(wordNr)
-        }, 5000)
+        }, 3000)
 
     }
     private fun initGame(wordNr: Int){
         word = wordList[wordNr].toUpperCase()
         hangman = Hangman(word)
-
-        setContentView(R.layout.activity_main)
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        imageStar = findViewById(R.id.star)
-        imageStar.visibility = View.GONE
-        imageHolder = findViewById(R.id.hangManView)
-        imageHolder.layoutParams.width = width;
-        imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
-
-
-        val word_TV = findViewById<TextView>(R.id.word)
-        word_TV.text = hangman.get_display_word()
-
         // set hangman graphic to first frame
         setImage(0)
+        enableButtons(window.decorView, true)
+        val word_TV = findViewById<TextView>(R.id.word)
+        word_TV.text = hangman.get_display_word()
+        word_TV.alpha = 0f
+        imageHolder.animate()
+            .alpha(1f)
+            .setDuration(1000)
+
+        word_TV.animate()
+            .alpha(1f)
+            .setDuration(1000)
+
+
     }
     private fun runWinAnimation(){
         Log.d(TAG, "run win animation")
         imageHolder.animate()
             .alpha(0f)
-            .setDuration(200)
+            .setDuration(300)
 
         imageStar.apply {
             // Set the star view to 0% opacity but visible, so that it is visible
@@ -138,19 +143,26 @@ class MainActivity : AppCompatActivity() {
             animate()
                 .alpha(1f)
 
-                .scaleX(2f)
-                .scaleY(2f)
-                .setDuration(500)
+                .scaleX(3f)
+                .scaleY(3f)
+                .setDuration(300)
                 .setListener(null)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        fadeInNewGame()
+                        Handler().postDelayed({
+                            fadeOut()
+                        }, 500)
+
                     }
                 })
         }
 
     }
-    private fun fadeInNewGame(){
+    private fun fadeOut(){
+        // set hangman graphic to first frame
+        setImage(0)
+
+        val word_TV = findViewById<TextView>(R.id.word)
         imageStar.animate()
             .alpha(0f)
             .setDuration(500)
@@ -161,5 +173,32 @@ class MainActivity : AppCompatActivity() {
                     initGame(wordNr)
                 }
             })
+        word_TV.animate()
+            .alpha(0f)
+            .setDuration(500)
+
+    }
+
+    private fun enableButtons(v: View, enable: Boolean) {
+        val viewgroup = v as ViewGroup
+        for (i in 0 until viewgroup.childCount) {
+            val v1 = viewgroup.getChildAt(i)
+            (v1 as? ViewGroup)?.let { enableButtons(it, enable) }
+            if (v1 is Button ) {
+                if(enable) {
+                    v1.enable()
+                }else{
+                    v1.disable()
+                }
+            }
+        }
+    }
+    private fun View.disable() {
+        alpha = 0.2f
+        isClickable = false
+    }
+    private fun View.enable(){
+        alpha = 1f
+        isClickable = true
     }
 }
