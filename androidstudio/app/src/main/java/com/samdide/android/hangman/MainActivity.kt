@@ -2,6 +2,7 @@ package com.samdide.android.hangman
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.TargetApi
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import kotlin.math.roundToInt
 
 
@@ -120,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             wordNr ++
             if (wordNr >= wordList.size) wordNr = 0
             initGame(wordNr)
-        }, 3000)
+        }, 3500)
 
     }
     private fun initGame(wordNr: Int){
@@ -146,13 +149,15 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "run win animation")
         imageHolder.animate()
             .alpha(0f)
-            .setDuration(300)
+            .setDuration(200)
 
         imageStar.apply {
             // Set the star view to 0% opacity but visible, so that it is visible
             // (but fully transparent) during the animation.
             alpha = 0f
             visibility = View.VISIBLE
+            scaleX = 0.2f
+            scaleY = 0.2f
 
             // Animate the star view to 100% opacity, and clear any animation
             // listener set on the view.
@@ -161,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
                 .scaleX(3f)
                 .scaleY(3f)
-                .setDuration(300)
+                .setDuration(400)
                 .setListener(null)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
@@ -213,8 +218,10 @@ class MainActivity : AppCompatActivity() {
         alpha = 0.2f
         isClickable = false
     }
+
     private fun View.enable(){
         alpha = 1f
         isClickable = true
     }
+
 }
