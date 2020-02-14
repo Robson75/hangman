@@ -31,10 +31,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var word: String
     lateinit var hangman: Hangman
     lateinit var imageStar: ImageView
-    var wordNr = 0
 
-    // All words in uppercase
-    var wordList = arrayOf("BANANA", "RAT", "GARLIC", "SPIDER", "FRACTION", "MERCURY", "APOSTROPHE")
+
+    var wordList = arrayOf("BANANA", "RAT", "GARLIC", "SPIDER", "FRACTION", "MERCURY", "APOSTROPHE",
+        "finger", "dance", "car", "television", "umbrella", "tiger", "hospital", "car", "cradle",
+        "important", "secret", "quiz", "parachute", "mother", "hotel", "restaurant", "mountain")
 
 
 
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         imageHolder = findViewById(R.id.hangManView)
         imageHolder.layoutParams.width = width;
         imageHolder.layoutParams.height = (width * IMAGE_ASPECT_RATIO).roundToInt();
-        initGame(wordNr)
+        initGame()
         //hangman.guess('l')
         //hangman.guess('h')
     }
@@ -120,14 +121,12 @@ class MainActivity : AppCompatActivity() {
             escapeAnimation.start()
         }, 500)
         Handler().postDelayed({
-            wordNr ++
-            if (wordNr >= wordList.size) wordNr = 0
-            initGame(wordNr)
+           initGame()
         }, 3500)
 
     }
-    private fun initGame(wordNr: Int){
-        word = wordList[wordNr].toUpperCase()
+    private fun initGame(){
+        word = getNewWord()
         hangman = Hangman(word)
         // set hangman graphic to first frame
         setImage(0)
@@ -189,15 +188,20 @@ class MainActivity : AppCompatActivity() {
             .setDuration(500)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    wordNr ++
-                    if (wordNr >= wordList.size) wordNr = 0
-                    initGame(wordNr)
+                    initGame()
                 }
             })
         word_TV.animate()
             .alpha(0f)
             .setDuration(500)
 
+    }
+
+    private fun getNewWord():String{
+        var maxNr = wordList.size - 1
+        var wordIndex = (0..maxNr).random()
+        var newWord = wordList[wordIndex].toUpperCase()
+        return newWord
     }
 
     private fun toggleButtons(v: View, enable: Boolean) {
