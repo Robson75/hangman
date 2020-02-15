@@ -3,6 +3,7 @@ package com.samdide.android.hangman
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
+import android.content.pm.ActivityInfo
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -33,14 +34,16 @@ class MainActivity : AppCompatActivity() {
     lateinit var imageStar: ImageView
 
 
-    var wordList = arrayOf("BANANA", "RAT", "GARLIC", "SPIDER", "FRACTION", "MERCURY", "APOSTROPHE",
+    var wordList = arrayOf("BANANA", "RAT", "GARLIC", "SPIDER", "tooth", "piano", "library",
         "finger", "dance", "car", "television", "umbrella", "tiger", "hospital", "car", "cradle",
-        "important", "secret", "quiz", "parachute", "mother", "hotel", "restaurant", "mountain")
+        "important", "secret", "quiz", "parachute", "mother", "hotel", "restaurant", "mountain",
+        "dryclean", "laugh", "cry", "tennis", "jazz", "funny", "children", "point", "egg")
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation =  ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         setContentView(R.layout.activity_main)
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
