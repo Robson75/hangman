@@ -3,12 +3,15 @@ package com.samdide.android.hangman
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -40,6 +43,20 @@ class MainActivity : AppCompatActivity() {
         "dryclean", "laugh", "cry", "tennis", "jazz", "funny", "children", "point", "egg")
 
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.info -> {
+            Log.d(TAG, "info button clicked")
+            val intent = Intent(this, Info::class.java)
+            startActivity(intent)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
